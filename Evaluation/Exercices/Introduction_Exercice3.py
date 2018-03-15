@@ -6,6 +6,7 @@ import re
 from bs4 import BeautifulSoup
 import random
 import json
+import ast
 
 
 class HttpReq:
@@ -193,7 +194,7 @@ class HttpReq:
             print("\nParameter create_file has been set to False."
                   "\nSo the Json file containing the core content won't be generated")
 
-    def get_core_content(self, soup_obj, create_file=False):
+    def get_core_content(self, soup_obj=None, create_file=False):
         """
         This method permits to get the core content in a JSON object.
         'Core' means : h1, titles, links and main text.
@@ -203,8 +204,11 @@ class HttpReq:
         :return: the core content in a JSON object.
         """
         if self.core_content is None:
-            self.process_core_content(soup_obj, create_file=create_file)
-        return self.core_content
+            if soup_obj is not None:
+                self.process_core_content(soup_obj=soup_obj, create_file=create_file)
+            else:
+                print("You must specify a soup object when calling this method.")
+        return ast.literal_eval(self.core_content)
 
     @staticmethod
     def del_string_spaces(a_string):
@@ -216,3 +220,4 @@ class HttpReq:
         """
         return_string = a_string.strip()
         return "".join(return_string)
+
