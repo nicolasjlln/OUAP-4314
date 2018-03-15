@@ -17,6 +17,7 @@ class HttpReq:
         It inits the HttpReq object.
         """
         self.url = None
+        self.resp = None
         self.resp_content = None
         self.resp_text = None
         self.ua = None
@@ -45,11 +46,11 @@ class HttpReq:
 
         return string
 
-    def get(self, url, timeout=10, retry=3):
+    def get(self, url, headers, timeout=10, retry=3):
         """
         This method will build and send a HTTP request at the given url address.
-
         :param url: The url of the web page to reach.
+        :param headers: The request header.
         :param timeout: timeout applied to the request.
         :param retry: maximum number of requests before return None.
         :return: the result of the request (could be 'None' is the serveur is
@@ -57,13 +58,20 @@ class HttpReq:
         """
         self.url = str(url)
 
-        headers = {'User-Agent': self.change_ua()}
+        try:
+            headers['User-agent']
+        except KeyError:
+            self.change_ua()
+
         response = requests.get(url, headers=headers, timeout=timeout)
         if retry is -1:
             raise TimeoutError("The server is unreachable at the moment...")
         elif response is None:
-            self.get(url, timeout=timeout, retry=retry-1)
+            self.get(url, headers, timeout=timeout, retry=retry-1)
         else:
+            if isinstance(response, dict):
+                print("The response is in a JSON file format.")
+            self.resp = response
             self.resp_content = str(response.content)
             self.resp_text = str(response.text)
 
@@ -117,6 +125,9 @@ class HttpReq:
         :return: the content.
         """
         return self.resp_content
+
+    def response(self):
+        return self.resp
 
     def change_ua(self):
         """
