@@ -15,13 +15,13 @@ def getListAnnonces(nameAgence):
     return db.annonce.distinct('title_annonce',{'agence_annonce': 'www.orpi.com/' +nameAgence+'/'})
 
 def getInfoAnnonces(nameAnnonce):
-    return db.annonce.find_one({'title_annonce': nameAnnonce}) 
+    return db.annonce.find_one({'title_annonce': nameAnnonce})
 
 def rechercheAvancee(price_low, price_high, surface_low, surface_high, room_num, type1):
     return db.annonce.distinct('title_annonce',
-        {'$and':[{'price_annonce':{'$gte': price_low, '$lte': price_high}}, 
-        {'room_number_annonce': room_num}, 
-        {'area_annonce':{'$gte': surface_low, '$lte': surface_high}}, 
+        {'$and':[{'price_annonce':{'$gte': price_low, '$lte': price_high}},
+        {'room_number_annonce': room_num},
+        {'area_annonce':{'$gte': surface_low, '$lte': surface_high}},
         {'type_annonce':type1}]})
 
 def Main_views(app):
@@ -60,7 +60,7 @@ def Main_views(app):
         if type1=='m':
             type1='maison'
         elif type1=='a':
-            type1=='appartement'
+            type1='appartement'
         annonces = rechercheAvancee(price_low, price_high, surface_low, surface_high, room_num, type1)
         return render_template('form_result.html', annonces=annonces)
 
