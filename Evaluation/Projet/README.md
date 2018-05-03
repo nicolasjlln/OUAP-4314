@@ -32,7 +32,7 @@ $ pip3 install docker
 
 * You must clone the git dir or download it on your computer.
 ```
-$ git clone https://gitlab.com/charleswit/GuessMyAddress.git
+$ git clone https://github.com/nicolasjlln/dataEngineeringProject.git
 ```
 
 * Using Docker, you have to build the Docker image with :
